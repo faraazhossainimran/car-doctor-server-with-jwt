@@ -39,12 +39,12 @@ async function run() {
       const query = {_id: new ObjectId(id)}
       const options = {
         // Include only the `title` and `imdb` fields in each returned document
-        projection: { title: 1, price: 1, service_id: 1, img: 1 },
+        projection: { title: 1, price: 1, service_id: 1, img: 1, price:1 },
       };
       const result = await serviceCollection.findOne(query, options)
       res.send(result)
     })
-    // get a/some bookings
+    // get a/some bookings on email specific 
     app.get('/bookings', async(req, res)=> {
       console.log(req.query.email);
       let query = {};
@@ -52,6 +52,13 @@ async function run() {
         query = {email: req.query.email}
       }
       const result = await bookingCollection.find(query).toArray()
+      res.send(result)
+    })
+    // delete
+    app.delete('/bookings/:id', async(req, res)=> {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await bookingCollection.deleteOne(query);
       res.send(result)
     })
     // post bookings
